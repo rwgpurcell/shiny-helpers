@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+source("../multiWidgetModule.R")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -27,31 +28,31 @@ ui <- fluidPage(
 
         # Show a plot of the generated distribution
         mainPanel(
-           plotOutput("distPlot")
+           plotOutput("distPlot"),
+           multiWidgetModuleUI("faithfulPlots")
         )
     )
 )
 
-plotFunc <- function(bins){renderPlot({
+plotFunc <- function(bins){
     # generate bins based on input$bins from ui.R
     x    <- faithful[, 2]
     bins <- seq(min(x), max(x), length.out = bins + 1)
 
     # draw the histogram with the specified number of bins
     hist(x, breaks = bins, col = 'darkgray', border = 'white')
-})
 }
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
 
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+    faithfulPlots <- callModule(multiWidgetModule,"faithfulPlots",plotFunc,list(5,25,40,15),
+                                list(ui = plotOutput, server = renderPlot))
+
+
+    output$distPlot <- renderPlot({
+        plotFunc(input$bins)
     })
 }
 
