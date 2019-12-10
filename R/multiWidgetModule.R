@@ -13,7 +13,9 @@ multiWidgetModuleUI <- function(id) {
 }
 
 #function_inputs must be a list of
-multiWidgetModule <- function(input, output, session, func, func_inputs, widgetFuncs) {
+multiWidgetModule <- function(input, output, session,
+                              func, func_inputs, widgetFuncs,
+                              nColumns = 1) {
   # if(!widget %in% names(widgetList)){
   #   stop('widget must be from known list ')
   # }
@@ -22,6 +24,11 @@ multiWidgetModule <- function(input, output, session, func, func_inputs, widgetF
   print("HOWDY!!!")
   # renderWidget <- widgetList[widget]$server
   # widgetOutput <- widgetList[widget]$ui
+  if(!is.numeric(nColumns)){
+    stop("nColumns must be numeric")
+  }
+  nColumns = floor(abs(nColumns))
+
 
   nWidgets <- length(func_inputs)
 
@@ -37,13 +44,21 @@ multiWidgetModule <- function(input, output, session, func, func_inputs, widgetF
 
   #nButtons: paste0("button",i)
   #inline: no br()s
+
+  widget_grid <- lapply(1:ceiling(nWidgets/nColumns),function(i){
+    fluidRow(tagList(lapply((1+(i-1)*nColumns):min(i*nColumns,nWidgets),function(j){
+      tagList(column(width=12/nColumns,widgetFuncs$ui(ns(j))))
+    })))
+  })
+
   widget_list <- lapply(1:nWidgets, function(i) {
     tagList(widgetFuncs$ui(ns(i)),br())
   })
 
   output$widgetSet <- renderUI({
-    widget_list
+    widget_grid
   })
 
+  # TODO return reactive containing input
   return(1)
 }

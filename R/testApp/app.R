@@ -47,8 +47,8 @@ plotFunc <- function(bins){
 server <- function(input, output) {
 
 
-    faithfulPlots <- callModule(multiWidgetModule,"faithfulPlots",plotFunc,list(5,25,40,15),
-                                list(ui = plotOutput, server = renderPlot))
+    faithfulPlots <- callModule(multiWidgetModule,"faithfulPlots",plotFunc,list(20,14,5,40,7,16,11,32,15,45),
+                                list(ui = plotOutput, server = renderPlot),nColumns=3)
 
 
     output$distPlot <- renderPlot({
