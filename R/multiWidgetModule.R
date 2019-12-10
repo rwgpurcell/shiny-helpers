@@ -6,12 +6,13 @@ widgetList <- list(
 )
 
 
-
+#' @export
 multiWidgetModuleUI <- function(id) {
   ns <- NS(id)
   uiOutput(ns("widgetSet"))
 }
 
+#' @export
 #function_inputs must be a list of
 multiWidgetModule <- function(input, output, session,
                               func, func_inputs, widgetFuncs,

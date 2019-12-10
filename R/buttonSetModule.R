@@ -1,15 +1,11 @@
 
-widgetList <- list(
-  plot = list(ui = renderPlot, server = plotOutput),
-  table = list(ui = renderUI, server = uiOutput),
-  ui = list(ui = renderTable, server = tableOutput))
-
-
+#' @export
 buttonSetModuleUI <- function(id) {
   ns <- NS(id)
   uiOutput(ns("buttonSet"))
 }
 
+#' @export
 buttonSetModule <- function(input, output, session, choices=NULL, inline=FALSE,n_buttons=NULL) {
   #set ns for use in renderUI outputs
   ns <- session$ns
