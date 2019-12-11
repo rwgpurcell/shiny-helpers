@@ -24,7 +24,7 @@ multiWidgetModule <- function(input, output, session,
   # }
   #set ns for use in renderUI outputs
   ns <- session$ns
-  print("HOWDY!!!")
+  # print("HOWDY!!!")
   # renderWidget <- widgetList[widget]$server
   # widgetOutput <- widgetList[widget]$ui
   if(!is.numeric(nColumns)){
@@ -44,9 +44,9 @@ multiWidgetModule <- function(input, output, session,
       # print(length(func_inputs[[my_i]]))
       # print(func_inputs[[my_i]])
       args <- c(list(input,output,session),func_inputs[[my_i]])
-      print(typeof(args))
-      print(length(args))
-      print(names(args))
+      # print(typeof(args))
+      # print(length(args))
+      # print(names(args))
       # print(args)
       output[[my_i]] <- widgetFuncs$server({
         do.call(func,args)
