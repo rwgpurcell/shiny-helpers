@@ -1,3 +1,4 @@
+library(shiny)
 
 widgetList <- list(
   plot = list(ui = plotOutput, server = renderPlot),
@@ -15,7 +16,8 @@ multiWidgetModuleUI <- function(id) {
 #' @export
 #function_inputs must be a list of
 multiWidgetModule <- function(input, output, session,
-                              func, func_inputs, widgetFuncs,
+                              func, func_inputs,
+                              widgetFuncs = list(ui = uiOutput, server = renderUI),
                               nColumns = 1) {
   # if(!widget %in% names(widgetList)){
   #   stop('widget must be from known list ')
@@ -32,14 +34,23 @@ multiWidgetModule <- function(input, output, session,
 
 
   nWidgets <- length(func_inputs)
-
+  # print(nWidgets)
+  # print(func_inputs)
   for(i in 1:nWidgets){
     local({
       #renderWidget <- widgetList[widget]$server
       my_i <- i
       #nButtons: paste0("button",my_i)
-      print(func_inputs[[my_i]])
-      output[[my_i]] <- widgetFuncs$server({func(func_inputs[[my_i]])})
+      # print(length(func_inputs[[my_i]]))
+      # print(func_inputs[[my_i]])
+      args <- c(list(input,output,session),func_inputs[[my_i]])
+      print(typeof(args))
+      print(length(args))
+      print(names(args))
+      # print(args)
+      output[[my_i]] <- widgetFuncs$server({
+        do.call(func,args)
+        })
     })
   }
 

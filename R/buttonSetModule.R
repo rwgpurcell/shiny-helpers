@@ -1,3 +1,4 @@
+library(shiny)
 
 #' @export
 buttonSetModuleUI <- function(id) {
