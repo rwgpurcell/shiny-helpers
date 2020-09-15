@@ -71,6 +71,18 @@ multiWidgetModule <- function(input, output, session,
     widget_grid
   })
 
+
+  #ret <- reactiveValues()
+
+  # ret <- reactive({
+  #   print("hello")
+  #   print(names(input))
+  #   names(input)
+  # })
+
   # TODO return reactive containing input
+  # For now, it's best if you know the names of the inputs based on whatever data used to
+  # call your func
+  #print(input)
   return(1)
 }

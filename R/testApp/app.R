@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+library(tidyverse)
 source("../multiWidgetModule.R")
 
 # Define UI for application that draws a histogram
@@ -23,7 +24,9 @@ ui <- fluidPage(
                         "Number of bins:",
                         min = 1,
                         max = 50,
-                        value = 30)
+                        value = 30),
+            uiOutput("testSelects"),
+            textOutput("testText")
         ),
 
         # Show a plot of the generated distribution
@@ -58,9 +61,32 @@ plotFunc2 <- function(input,output,session,binCount,name){
     tagList(p(name),plotOutput(ns(name)))
 }
 
+test_list <- list(option_one = c(5,10,15),option_two = c(10,20,30))
+test_args <- map(names(test_list),~list(name=.,vals=sort(unique(test_list[[.]]))))
+
+testSelect <- function(input,output,session,name,vals){
+    ns <- session$ns
+    selectInput(ns(name), name, vals, multiple=F, selectize=FALSE)
+}
+
+
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
 
+
+    testMod <- callModule(multiWidgetModule,"testSelects",testSelect,test_args,
+                           list(ui = uiOutput, server = renderUI))
+
+
+    output$testSelects <- renderUI({
+        #print(agentData())
+
+        multiWidgetModuleUI("testSelects")
+    })
+
+    output$testText <- renderText({
+        input[['testSelects-option_one']]
+    })
 
     binCounts <- reactive({
         lapply(list(1,5,10,15),function(i){
